@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Marks Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 48%;
+            margin: 5px 1%;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        .btn-edit {
+            background-color: #28a745;
+        }
+        .btn-edit:hover {
+            background-color: #1e7e34;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+        }
+        .btn-delete:hover {
+            background-color: #a71d2a;
+        }
+    </style>
+</head>
+<body>
+
+    <header>🎓 Student Marks Manager</header>
+
+    <div class="container">
+        <label for="name">Student Name:</label>
+        <input type="text" id="name" placeholder="Enter student name">
+
+        <label for="marks">Marks:</label>
+        <input type="number" id="marks" placeholder="Enter marks">
+
+        <button onclick="addStudent()">➕ Add Student</button>
+        <button onclick="clearAll()" style="background-color: orange;">🧹 Clear All</button>
+
+        <table id="studentsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Marks</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+<script>
+    let students = [];
+
+    function addStudent() {
+        let name = document.getElementById('name').value.trim();
+        let marks = document.getElementById('marks').value.trim();
+
+        if (name === '' || marks === '') {
+            alert('⚠️ Please enter both name and marks!');
+            return;
+        }
+
+        students.push({ name, marks });
+        displayStudents();
+        document.getElementById('name').value = '';
+        document.getElementById('marks').value = '';
+    }
+
+    function deleteStudent(index) {
+        if (confirm(`Are you sure you want to delete ${students[index].name}?`)) {
+            students.splice(index, 1);
+            displayStudents();
+        }
+    }
+
+    function editStudent(index) {
+        let newMarks = prompt(`Enter new marks for ${students[index].name}:`, students[index].marks);
+        if (newMarks !== null && newMarks.trim() !== '') {
+            students[index].marks = newMarks;
+            displayStudents();
+        }
+    }
+
+    function clearAll() {
+        if (confirm('Are you sure you want to clear all records?')) {
+            students = [];
+            displayStudents();
+        }
+    }
+
+    function displayStudents() {
+        let tableBody = document.querySelector('#studentsTable tbody');
+        tableBody.innerHTML = '';
+
+        students.forEach((student, index) => {
+            let row = `<tr>
+                <td>${student.name}</td>
+                <td>${student.marks}</td>
+                <td>
+                    <button class='btn-edit' onclick='editStudent(${index})'>✏️ Edit</button>
+                    <button class='btn-delete' onclick='deleteStudent(${index})'>🗑 Delete</button>
+                </td>
+            </tr>`;
+            tableBody.innerHTML += row;
+        });
+    }
+</script>
+
+</body>
+</html>
